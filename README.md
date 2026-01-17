@@ -1,3 +1,5 @@
+<img src="assets/logo-64.svg" alt="Textspec" width="64" height="64">
+
 # Textspec
 
 A toolkit for testing rich text editors.
