@@ -10,6 +10,7 @@
     "test:browser:chromium": "turbo test:browser:chromium",
     "test:browser:firefox": "turbo test:browser:firefox",
     "test:browser:webkit": "turbo test:browser:webkit",
+    "test:coverage": "turbo test:coverage",
     "test:watch": "turbo test:watch",
     "check:format": "prettier . --check",
     "check:lint": "turbo check:lint",
