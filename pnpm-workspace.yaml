@@ -1,2 +1,12 @@
 packages:
   - "packages/*"
+
+catalog:
+  typescript: ^5.9.3
+
+settings:
+  updateConfig:
+    ignoreDependencies:
+      - "*"
+    allowedDeprecatedVersions: {}
+    minimumReleaseAge: "3 days"
