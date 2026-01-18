@@ -72,6 +72,28 @@ importers:
         specifier: ^4.0.16
         version: 4.0.16(@types/node@25.0.3)(@vitest/browser-playwright@4.0.16)(happy-dom@18.0.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/textspec:
+    dependencies:
+      '@textspec/notation':
+        specifier: workspace:^
+        version: link:../notation
+    devDependencies:
+      '@sanity/browserslist-config':
+        specifier: ^1.0.5
+        version: 1.0.5
+      '@sanity/pkg-utils':
+        specifier: ^10.2.5
+        version: 10.2.5(@types/babel__core@7.20.5)(@types/node@25.0.3)(typescript@5.9.3)
+      '@sanity/tsconfig':
+        specifier: ^2.1.0
+        version: 2.1.0
+      del-cli:
+        specifier: ^7.0.0
+        version: 7.0.0
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
 packages:
 
   '@babel/code-frame@7.27.1':

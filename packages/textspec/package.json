@@ -1,0 +1,63 @@
+{
+  "name": "textspec",
+  "version": "1.0.0",
+  "description": "Standard text editing utilities - re-exports all @textspec packages",
+  "keywords": [
+    "text-editing",
+    "parser",
+    "editor-state",
+    "notation"
+  ],
+  "license": "MIT",
+  "author": "Christian Grøngaard <christian@groengaard.dk>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/textspec/textspec.git",
+    "directory": "packages/textspec"
+  },
+  "homepage": "https://github.com/textspec/textspec#readme",
+  "bugs": {
+    "url": "https://github.com/textspec/textspec/issues"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    "./notation": {
+      "source": "./src/notation.ts",
+      "default": "./dist/notation.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pkg-utils build --strict --check --clean",
+    "check:lint": "biome lint .",
+    "check:types": "tsc",
+    "clean": "del .turbo && del dist && del node_modules",
+    "dev": "pkg-utils watch",
+    "lint:fix": "biome lint --write .",
+    "prepublishOnly": "turbo run build"
+  },
+  "dependencies": {
+    "@textspec/notation": "workspace:^"
+  },
+  "devDependencies": {
+    "@sanity/browserslist-config": "^1.0.5",
+    "@sanity/pkg-utils": "^10.2.5",
+    "@sanity/tsconfig": "^2.1.0",
+    "del-cli": "^7.0.0",
+    "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=20.19 <22 || >=22.12"
+  },
+  "browserslist": "extends @sanity/browserslist-config",
+  "publishConfig": {
+    "exports": {
+      "./notation": "./dist/notation.js",
+      "./package.json": "./package.json"
+    }
+  }
+}
