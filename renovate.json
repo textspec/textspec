@@ -16,33 +16,33 @@
     },
     {
       "description": "Group @textspec packages",
-      "matchPackagePatterns": ["^@textspec/"],
-      "groupName": "textspec"
+      "groupName": "textspec",
+      "matchPackageNames": ["/^@textspec//"]
     },
     {
       "description": "Group @sanity packages",
-      "matchPackagePatterns": ["^@sanity/"],
-      "groupName": "sanity"
+      "groupName": "sanity",
+      "matchPackageNames": ["/^@sanity//"]
     },
     {
       "description": "Group Vitest packages",
-      "matchPackagePatterns": ["^vitest", "^@vitest/"],
-      "groupName": "vitest"
+      "groupName": "vitest",
+      "matchPackageNames": ["/^vitest/", "/^@vitest//"]
     },
     {
       "description": "Group Playwright packages",
-      "matchPackagePatterns": ["^@playwright/", "^playwright"],
-      "groupName": "playwright"
+      "groupName": "playwright",
+      "matchPackageNames": ["/^@playwright//", "/^playwright/"]
     },
     {
       "description": "Group Changesets packages",
-      "matchPackagePatterns": ["^@changesets/"],
-      "groupName": "changesets"
+      "groupName": "changesets",
+      "matchPackageNames": ["/^@changesets//"]
     },
     {
       "description": "Group Prettier packages",
-      "matchPackagePatterns": ["^prettier", "^@ianvs/prettier"],
-      "groupName": "prettier"
+      "groupName": "prettier",
+      "matchPackageNames": ["/^prettier/", "/^@ianvs/prettier/"]
     }
   ]
 }
