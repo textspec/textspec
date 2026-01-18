@@ -13,6 +13,36 @@
     {
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
+    },
+    {
+      "description": "Group @textspec packages",
+      "matchPackagePatterns": ["^@textspec/"],
+      "groupName": "textspec"
+    },
+    {
+      "description": "Group @sanity packages",
+      "matchPackagePatterns": ["^@sanity/"],
+      "groupName": "sanity"
+    },
+    {
+      "description": "Group Vitest packages",
+      "matchPackagePatterns": ["^vitest", "^@vitest/"],
+      "groupName": "vitest"
+    },
+    {
+      "description": "Group Playwright packages",
+      "matchPackagePatterns": ["^@playwright/", "^playwright"],
+      "groupName": "playwright"
+    },
+    {
+      "description": "Group Changesets packages",
+      "matchPackagePatterns": ["^@changesets/"],
+      "groupName": "changesets"
+    },
+    {
+      "description": "Group Prettier packages",
+      "matchPackagePatterns": ["^prettier", "^@ianvs/prettier"],
+      "groupName": "prettier"
     }
   ]
 }
