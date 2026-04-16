@@ -556,6 +556,23 @@ describe(parse.name, () => {
         },
       });
     });
+
+    test("underscore-prefixed attribute name", () => {
+      expect(parse('B _key="b1": foo|')).toEqual({
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "B",
+            attrs: { _key: "b1" },
+            children: [{ kind: "text", text: "foo" }],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 0], offset: 3 },
+          focus: { path: [0, 0], offset: 3 },
+        },
+      });
+    });
   });
 
   describe("single-line format", () => {
