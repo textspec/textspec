@@ -1,6 +1,6 @@
 {
   "name": "@textspec/notation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Parser and serializer for the Textspec editor state notation",
   "keywords": [
     "text-editing",
