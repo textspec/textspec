@@ -736,8 +736,10 @@ export class Lexer {
       return false;
     }
     const code = char.charCodeAt(0);
-    // a-z: 97-122, A-Z: 65-90
-    return (code >= 97 && code <= 122) || (code >= 65 && code <= 90);
+    // a-z: 97-122, A-Z: 65-90, _: 95
+    return (
+      (code >= 97 && code <= 122) || (code >= 65 && code <= 90) || code === 95
+    );
   }
 
   private isIdentChar(char: string): boolean {
