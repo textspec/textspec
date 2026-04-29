@@ -7,6 +7,8 @@ describe("Round-trip", () => {
     // Simple text blocks
     "P: foo|",
     "P: foo bar|",
+    'P: \\"foo\\"|',
+    'P: a\\"b\\"c|',
     "H1: foo|",
     "H2: bar baz|",
 

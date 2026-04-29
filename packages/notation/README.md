@@ -511,6 +511,7 @@ P tags=["draft", "review"]: content|
 \{  \}    braces
 \|  \^    selection markers (as literals)
 \;        semicolon (to escape ;;)
+\"        double quote (opens an attribute string elsewhere)
 \\        backslash
 ```
 

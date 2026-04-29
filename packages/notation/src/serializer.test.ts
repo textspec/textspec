@@ -358,6 +358,23 @@ describe(serialize.name, () => {
       };
       expect(serialize(state)).toBe("P: foo\\;\\;bar|");
     });
+
+    test("double quotes in text", () => {
+      const state: EditorState = {
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [{ kind: "text", text: '"foo"' }],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 0], offset: 5 },
+          focus: { path: [0, 0], offset: 5 },
+        },
+      };
+      expect(serialize(state)).toBe('P: \\"foo\\"|');
+    });
   });
 
   describe("single-line format", () => {
