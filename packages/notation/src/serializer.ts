@@ -340,6 +340,8 @@ export class Serializer {
         return "\\^";
       case ";":
         return "\\;"; // Escape to prevent ;; being interpreted as block separator
+      case '"':
+        return '\\"'; // Escape to prevent " from opening a quoted string
       default:
         return char;
     }
