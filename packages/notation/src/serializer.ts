@@ -360,13 +360,53 @@ export class Serializer {
   }
 
   private serializeMark(mark: Mark): string {
-    const prefix =
-      mark.mode === "annotation" ? "@" : mark.mode === "overlay" ? "~" : "";
-    const attrs = this.serializeAttributes(mark.attrs ?? {});
-    const attrsStr = attrs ? ` ${attrs}` : "";
-    const content = this.serializeInlineContent(mark.children);
+    const chain: Array<Mark> = [mark];
+    let current = mark;
+    while (
+      current.children.length === 1 &&
+      current.children[0]?.kind === "mark"
+    ) {
+      current = current.children[0];
+      chain.push(current);
+    }
 
-    return `[${prefix}${mark.type}${attrsStr}:${content}]`;
+    if (chain.length === 1) {
+      const prefix =
+        mark.mode === "annotation" ? "@" : mark.mode === "overlay" ? "~" : "";
+      const attrs = this.serializeAttributes(mark.attrs ?? {});
+      const attrsStr = attrs ? ` ${attrs}` : "";
+      const content = this.serializeInlineContent(mark.children);
+      return `[${prefix}${mark.type}${attrsStr}:${content}]`;
+    }
+
+    const parts = chain.map((chainMark) => {
+      const prefix =
+        chainMark.mode === "annotation"
+          ? "@"
+          : chainMark.mode === "overlay"
+            ? "~"
+            : "";
+      const attrs = this.serializeAttributes(chainMark.attrs ?? {});
+      const attrsStr = attrs ? ` ${attrs}` : "";
+      return `${prefix}${chainMark.type}${attrsStr}`;
+    });
+
+    // Descend the path through each intermediate mark in the chain
+    // so selection tracking stays correct
+    const basePath = [...this.state.currentPath];
+    for (let depth = 1; depth < chain.length; depth++) {
+      this.state.currentPath = [...this.state.currentPath, 0];
+    }
+
+    const innermost = chain[chain.length - 1];
+    if (!innermost) {
+      return "";
+    }
+    const content = this.serializeInlineContent(innermost.children);
+
+    this.state.currentPath = basePath;
+
+    return `[${parts.join("+")}:${content}]`;
   }
 
   private serializeInlineObject(obj: InlineObject): string {

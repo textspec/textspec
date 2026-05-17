@@ -24,6 +24,12 @@ describe("Round-trip", () => {
     "P: [strong:[em:foo]]|",
     "P: foo [strong:bar] baz|",
 
+    // Mark combinator
+    "P: [strong+em:foo]|",
+    'P: [strong+@link href="url":foo]|',
+    "P: [a+b+c:foo]|",
+    "P: [strong+@comment+@link:foo]|",
+
     // Marks - annotations
     'P: [@link href="https://example.com":foo]|',
     'P: foo [@link href="https://example.com":bar] baz|',

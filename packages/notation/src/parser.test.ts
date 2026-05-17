@@ -246,6 +246,171 @@ describe(parse.name, () => {
         },
       });
     });
+
+    test("mark combinator with two marks", () => {
+      expect(parse("P: [strong+em:text]|")).toEqual({
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "strong",
+                mode: "decorator",
+                children: [
+                  {
+                    kind: "mark",
+                    type: "em",
+                    mode: "decorator",
+                    children: [{ kind: "text", text: "text" }],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 1], offset: 0 },
+          focus: { path: [0, 1], offset: 0 },
+        },
+      });
+    });
+
+    test("mark combinator with annotation first", () => {
+      expect(parse("P: [@link+strong:text]|")).toEqual({
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "link",
+                mode: "annotation",
+                children: [
+                  {
+                    kind: "mark",
+                    type: "strong",
+                    mode: "decorator",
+                    children: [{ kind: "text", text: "text" }],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 1], offset: 0 },
+          focus: { path: [0, 1], offset: 0 },
+        },
+      });
+    });
+
+    test("mark combinator with attributes on inner mark", () => {
+      expect(parse('P: [strong+@link href="url":text]|')).toEqual({
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "strong",
+                mode: "decorator",
+                children: [
+                  {
+                    kind: "mark",
+                    type: "link",
+                    mode: "annotation",
+                    attrs: { href: "url" },
+                    children: [{ kind: "text", text: "text" }],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 1], offset: 0 },
+          focus: { path: [0, 1], offset: 0 },
+        },
+      });
+    });
+
+    test("mark combinator with three marks", () => {
+      expect(parse("P: [a+b+c:text]|")).toEqual({
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "a",
+                mode: "decorator",
+                children: [
+                  {
+                    kind: "mark",
+                    type: "b",
+                    mode: "decorator",
+                    children: [
+                      {
+                        kind: "mark",
+                        type: "c",
+                        mode: "decorator",
+                        children: [{ kind: "text", text: "text" }],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 1], offset: 0 },
+          focus: { path: [0, 1], offset: 0 },
+        },
+      });
+    });
+
+    test("mark combinator with mixed modes", () => {
+      expect(parse("P: [strong+@comment+@link:text]|")).toEqual({
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "strong",
+                mode: "decorator",
+                children: [
+                  {
+                    kind: "mark",
+                    type: "comment",
+                    mode: "annotation",
+                    children: [
+                      {
+                        kind: "mark",
+                        type: "link",
+                        mode: "annotation",
+                        children: [{ kind: "text", text: "text" }],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 1], offset: 0 },
+          focus: { path: [0, 1], offset: 0 },
+        },
+      });
+    });
   });
 
   describe("inline objects", () => {

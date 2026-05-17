@@ -401,6 +401,30 @@ P: [strong:[em:bold and italic]]|
 P: [@link href="x":foo [strong:bar] baz]|
 ```
 
+#### Mark combinator
+
+When multiple marks apply to the same content, use `+` to combine them:
+
+```
+P: [strong+em:bold and italic]|
+P: [strong+@link href="url":bold link]|
+```
+
+This is equivalent to nesting:
+
+```
+P: [strong:[em:bold and italic]]|
+P: [strong:[@link href="url":bold link]]|
+```
+
+The combinator is especially useful for overlapping annotations:
+
+```
+P: [strong+@comment+@link:text]|
+```
+
+Each mark in the chain can have its own mode prefix and attributes.
+
 ### Inline object
 
 Inline objects are atomic elements.
