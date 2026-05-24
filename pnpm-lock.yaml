@@ -72,6 +72,37 @@ importers:
         specifier: ^4.0.16
         version: 4.0.17(@types/node@25.0.3)(happy-dom@18.0.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/portabletext:
+    dependencies:
+      '@textspec/notation':
+        specifier: workspace:^
+        version: link:../notation
+    devDependencies:
+      '@portabletext/schema':
+        specifier: ^2.1.1
+        version: 2.1.1
+      '@sanity/browserslist-config':
+        specifier: ^1.0.5
+        version: 1.0.5
+      '@sanity/pkg-utils':
+        specifier: ^10.2.5
+        version: 10.2.5(@types/babel__core@7.20.5)(@types/node@25.0.3)(typescript@5.9.3)
+      '@sanity/tsconfig':
+        specifier: ^2.1.0
+        version: 2.1.0
+      '@vitest/coverage-v8':
+        specifier: ^4.0.16
+        version: 4.0.17(vitest@4.0.17(@types/node@25.0.3)(happy-dom@18.0.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      del-cli:
+        specifier: ^7.0.0
+        version: 7.0.0
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.17(@types/node@25.0.3)(happy-dom@18.0.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+
   packages/textspec:
     dependencies:
       '@textspec/notation':
@@ -651,6 +682,10 @@ packages:
   '@pnpm/npm-conf@2.3.1':
     resolution: {integrity: sha512-c83qWb22rNRuB0UaVCI0uRPNRr8Z0FWnEIvT47jiHAmOIUHbBOg5XvV7pM5x+rKn9HRpjxquDbXYSXr3fAKFcw==}
     engines: {node: '>=12'}
+
+  '@portabletext/schema@2.1.1':
+    resolution: {integrity: sha512-cH5ZleN0nw3W7xYBvOfMoAhGdkz6XFGhk0yuXcAZX9rwrtWb6qfQVLcieGC5tmIsrDFjQeVMro64vIFg5tz6vA==}
+    engines: {node: '>=20.19 <22 || >=22.12'}
 
   '@rolldown/binding-android-arm64@1.0.0-beta.57':
     resolution: {integrity: sha512-GoOVDy8bjw9z1K30Oo803nSzXJS/vWhFijFsW3kzvZCO8IZwFnNa6pGctmbbJstKl3Fv6UBwyjJQN6msejW0IQ==}
@@ -3324,6 +3359,8 @@ snapshots:
       '@pnpm/config.env-replace': 1.1.0
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
+
+  '@portabletext/schema@2.1.1': {}
 
   '@rolldown/binding-android-arm64@1.0.0-beta.57':
     optional: true
