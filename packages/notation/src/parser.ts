@@ -232,11 +232,27 @@ export class Parser {
 
     this.expect(TokenType.COLON, ErrorCode.MissingColonInMark);
 
-    // Check what follows the colon
-    if (this.is(TokenType.NEWLINE) || this.is(TokenType.EOF)) {
-      // Container: TYPE: + children on next lines
+    if (
+      this.is(TokenType.NEWLINE) ||
+      this.is(TokenType.EOF) ||
+      this.is(TokenType.BLOCK_SEP) ||
+      this.is(TokenType.RBRACE) ||
+      this.is(TokenType.DEDENT)
+    ) {
       this.skipNewlines();
-      return this.parseContainer(blockType, attrs);
+      if (this.is(TokenType.INDENT)) {
+        return this.parseContainer(blockType, attrs);
+      }
+      // No inline content or indented children means an empty text block.
+      const block: TextBlock = {
+        kind: "textBlock",
+        type: blockType,
+        children: [],
+      };
+      if (Object.keys(attrs).length > 0) {
+        block.attrs = attrs;
+      }
+      return block;
     }
 
     // Inline children: TYPE:{...}
@@ -350,14 +366,6 @@ export class Parser {
   }
 
   private parseContainer(blockType: string, attrs: Attributes): ContainerBlock {
-    // Must have children (INDENT expected)
-    if (!this.is(TokenType.INDENT)) {
-      throw parseError(
-        ErrorCode.EmptyContainer,
-        this.currentToken.location.line,
-        this.currentToken.location.column,
-      );
-    }
     this.advance(); // consume INDENT
 
     const children: Array<Block> = [];
@@ -372,14 +380,6 @@ export class Parser {
 
     if (this.is(TokenType.DEDENT)) {
       this.advance();
-    }
-
-    if (children.length === 0) {
-      throw parseError(
-        ErrorCode.EmptyContainer,
-        this.currentToken.location.line,
-        this.currentToken.location.column,
-      );
     }
 
     const container: ContainerBlock = {

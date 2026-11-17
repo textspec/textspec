@@ -226,16 +226,16 @@ Hierarchy is expressed through indentation:
 
 Blocks are the top-level structural units. Text blocks, containers, and raw blocks can have optional attributes.
 
-| Type       | Contains         | Syntax                            |
-| ---------- | ---------------- | --------------------------------- |
-| Text block | Inline content   | `TYPE attrs: content`             |
-| Container  | Child blocks     | `TYPE attrs:` + indented children |
-| Raw block  | Raw text lines   | `TYPE! attrs:` + indented         |
-| Object     | Nothing (atomic) | `{TYPE attrs}`                    |
+| Type       | Contains                | Syntax                                 |
+| ---------- | ----------------------- | -------------------------------------- |
+| Text block | Optional inline content | `TYPE attrs: content` or `TYPE attrs:` |
+| Container  | Child blocks            | `TYPE attrs:` + indented children      |
+| Raw block  | Raw text lines          | `TYPE! attrs:` + indented              |
+| Object     | Nothing (atomic)        | `{TYPE attrs}`                         |
 
 ### Text block
 
-Text blocks contain inline content: text, marks, and inline objects.
+Text blocks contain inline content: text, marks, and inline objects. A text block can be empty: `TYPE attrs:` with no indented children.
 
 ```
 P: foo bar|
@@ -255,7 +255,7 @@ Common types: `P`, `H1`, `H2`, `H3`
 
 ### Container
 
-Containers hold child blocks.
+Containers hold child blocks. `TYPE:` followed by indented lines is a container. `TYPE:` with nothing after it is an empty text block. `TYPE:{...}` is a container written on one line.
 
 ```
 UL:
@@ -523,6 +523,10 @@ P tags=["draft", "review"]: content|
 \n    newline
 ```
 
+The `\s` escape is accepted anywhere in inline content. In multiline output, if a text block's line would end in a space, the serializer writes that last space as `\s`. Only the last one changes: `foo` plus two spaces is written `foo \s`. A space followed by `|`, `^` or `]` is not at the end of the line, so it stays a plain space.
+
+Raw-block text does not recognize these escapes and its trailing spaces stay literal.
+
 ### Unicode
 
 ```
@@ -536,13 +540,15 @@ P tags=["draft", "review"]: content|
 
 ### Space after colon
 
-Required for text blocks (separator, not content):
+Required between the colon and the content, including when the content is only a selection marker. The space is a separator, not content:
 
 ```
 P: foo|       content is "foo"
 P:  foo|      content is " foo"
 P:foo|        parse error
 ```
+
+An empty text block needs no space: `P:`. `P:{...}` is an inline container, not text.
 
 ### Marks vs blocks
 
@@ -555,7 +561,15 @@ Marks don't have this separator space:
 
 ### Empty content
 
+`P:` is the canonical spelling of an empty text block without a selection. Attributes are allowed, for example `P align="center":`. `P:` is empty when nothing follows the colon on its line. That includes the end of the document, `;;` and `}`. If the next line is indented one level deeper, `P:` is a container instead.
+
+`P: ` with a trailing space still parses as an empty text block. It serializes as `P:`.
+
 ```
+B:                no text
+B: \s             one space of text
+B: foo\s          text ending in a space
+B: foo |          space before caret, left literal
 P: |              empty paragraph with caret
 [strong:^|]       empty mark with selection
 ```
@@ -648,6 +662,8 @@ Scenario Outline: Selection behavior
 
 ### Serializing single-line
 
+Empty text blocks serialize as `B:` in both modes. Single-line output keeps content spaces literal, including spaces before `;;` or `}` and at the end of the document.
+
 Use the `singleLine` option:
 
 ```typescript
@@ -666,7 +682,7 @@ A parser must reject:
 - **Indentation**: tabs, non-multiple-of-2, level skips
 - **Selection**: multiple `|`, multiple `^`, `^` without `|`, no selection
 - **Delimiters**: unbalanced `[]` or `{}`
-- **Structure**: empty containers, empty document, missing space after colon
+- **Structure**: explicit empty inline containers (`TYPE:{}`), empty document, a missing space between the colon and the content (`P:foo`). `P:` on its own is valid: it is an empty text block.
 
 ---
 
