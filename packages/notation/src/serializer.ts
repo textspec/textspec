@@ -119,7 +119,7 @@ export class Serializer {
     const attrs = this.serializeAttributes(block.attrs ?? {});
     const attrsStr = attrs ? ` ${attrs}` : "";
     const content = this.serializeInlineContent(block.children);
-    return `${block.type}${attrsStr}: ${content}`;
+    return `${block.type}${attrsStr}:${content ? ` ${content}` : ""}`;
   }
 
   private serializeContainerSingleLine(block: ContainerBlock): string {
@@ -162,8 +162,13 @@ export class Serializer {
   private serializeTextBlock(block: TextBlock, prefix: string): Array<string> {
     const attrs = this.serializeAttributes(block.attrs ?? {});
     const attrsStr = attrs ? ` ${attrs}` : "";
-    const content = this.serializeInlineContent(block.children);
-    return [`${prefix}${block.type}${attrsStr}: ${content}`];
+    const content = this.serializeInlineContent(block.children).replace(
+      / $/,
+      "\\s",
+    );
+    return [
+      `${prefix}${block.type}${attrsStr}:${content ? ` ${content}` : ""}`,
+    ];
   }
 
   private serializeContainer(

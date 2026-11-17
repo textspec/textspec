@@ -151,12 +151,12 @@ describe("Errors", () => {
     });
 
     test("EmptyContainer", () => {
-      // UL: with newline but no children
-      expect(() => parse("UL:\nP: after|")).toThrow(ParseError);
+      // Explicit inline container with no children
+      expect(() => parse("UL:{}")).toThrow(ParseError);
       try {
-        parse("UL:\nP: after|");
+        parse("UL:{}");
       } catch (e) {
-        expect((e as ParseError).code).toBe(ErrorCode.EmptyContainer);
+        expect((e as ParseError).code).toEqual(ErrorCode.EmptyContainer);
       }
     });
 

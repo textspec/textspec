@@ -204,6 +204,10 @@ describe(getRange.name, () => {
   });
 
   describe("edge cases", () => {
+    test("empty text block pattern returns null", () => {
+      expect(getRange(parse("P: foo"), "P:")).toEqual(null);
+    });
+
     test("empty pattern returns null", () => {
       expect(getRange(parse("P: foo"), "P: ")).toEqual(null);
     });

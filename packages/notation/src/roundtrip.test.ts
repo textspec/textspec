@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { parse } from "./parser";
 import { serialize } from "./serializer";
 
-describe("Round-trip", () => {
+describe(serialize.name, () => {
   const testCases = [
     // Simple text blocks
     "P: foo|",
@@ -93,8 +93,11 @@ describe("Round-trip", () => {
   for (const input of testCases) {
     test(`${input.replace(/\n/g, "\\n")}`, () => {
       const parsed = parse(input);
-      const roundTripped = parse(serialize(parsed));
-      expect(roundTripped).toEqual(parsed);
+      for (const options of [{}, { singleLine: true }]) {
+        const output = serialize(parsed, options);
+        expect(parse(output)).toEqual(parsed);
+        expect(serialize(parse(output), options)).toEqual(output);
+      }
     });
   }
 
@@ -115,8 +118,11 @@ describe("Round-trip", () => {
   for (const input of noSelectionCases) {
     test(`no selection: ${input.replace(/\n/g, "\\n")}`, () => {
       const parsed = parse(input);
-      const roundTripped = parse(serialize(parsed));
-      expect(roundTripped).toEqual(parsed);
+      for (const options of [{}, { singleLine: true }]) {
+        const output = serialize(parsed, options);
+        expect(parse(output)).toEqual(parsed);
+        expect(serialize(parse(output), options)).toEqual(output);
+      }
     });
   }
 });
