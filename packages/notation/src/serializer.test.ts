@@ -120,6 +120,101 @@ describe(serialize.name, () => {
       };
       expect(serialize(state)).toBe('P: [~highlight id="c1":foo|]');
     });
+
+    test("nested single-child marks use combinator", () => {
+      const state: EditorState = {
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "strong",
+                mode: "decorator",
+                children: [
+                  {
+                    kind: "mark",
+                    type: "em",
+                    mode: "decorator",
+                    children: [{ kind: "text", text: "foo" }],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 0, 0, 0], offset: 3 },
+          focus: { path: [0, 0, 0, 0], offset: 3 },
+        },
+      };
+      expect(serialize(state)).toBe("P: [strong+em:foo|]");
+    });
+
+    test("mark with multiple children does not use combinator", () => {
+      const state: EditorState = {
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "strong",
+                mode: "decorator",
+                children: [
+                  { kind: "text", text: "foo " },
+                  {
+                    kind: "mark",
+                    type: "em",
+                    mode: "decorator",
+                    children: [{ kind: "text", text: "bar" }],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 0, 1, 0], offset: 3 },
+          focus: { path: [0, 0, 1, 0], offset: 3 },
+        },
+      };
+      expect(serialize(state)).toBe("P: [strong:foo [em:bar|]]");
+    });
+
+    test("combinator with mixed modes and attributes", () => {
+      const state: EditorState = {
+        blocks: [
+          {
+            kind: "textBlock",
+            type: "P",
+            children: [
+              {
+                kind: "mark",
+                type: "strong",
+                mode: "decorator",
+                children: [
+                  {
+                    kind: "mark",
+                    type: "link",
+                    mode: "annotation",
+                    attrs: { href: "url" },
+                    children: [{ kind: "text", text: "foo" }],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        selection: {
+          anchor: { path: [0, 0, 0, 0], offset: 3 },
+          focus: { path: [0, 0, 0, 0], offset: 3 },
+        },
+      };
+      expect(serialize(state)).toBe('P: [strong+@link href="url":foo|]');
+    });
   });
 
   describe("inline objects", () => {
