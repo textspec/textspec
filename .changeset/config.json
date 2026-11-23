@@ -5,7 +5,7 @@
     { "repo": "textspec/textspec" }
   ],
   "commit": false,
-  "fixed": [],
+  "fixed": [["textspec", "@textspec/notation"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
