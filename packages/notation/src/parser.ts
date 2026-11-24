@@ -537,7 +537,54 @@ export class Parser {
     const loc = this.currentToken.location;
     this.advance(); // consume [
 
-    // Check for mode prefix
+    const markSpecs: Array<{
+      mode: MarkMode;
+      type: string;
+      attrs: Attributes;
+    }> = [];
+
+    markSpecs.push(this.parseMarkSpec());
+
+    while (this.is(TokenType.PLUS)) {
+      this.advance();
+      markSpecs.push(this.parseMarkSpec());
+    }
+
+    this.expect(TokenType.COLON, ErrorCode.MissingColonInMark);
+
+    const children = this.parseInlineContent();
+
+    if (!this.is(TokenType.RBRACKET)) {
+      throw parseError(ErrorCode.UnbalancedBracket, loc.line, loc.column);
+    }
+    this.advance();
+
+    const lastSpec = markSpecs[markSpecs.length - 1];
+    if (!lastSpec) {
+      throw parseError(
+        ErrorCode.InvalidIdentifier,
+        loc.line,
+        loc.column,
+        "empty mark chain",
+      );
+    }
+
+    let result: Mark = this.buildMark(lastSpec, children);
+    for (let index = markSpecs.length - 2; index >= 0; index--) {
+      const spec = markSpecs[index];
+      if (spec) {
+        result = this.buildMark(spec, [result]);
+      }
+    }
+
+    return result;
+  }
+
+  private parseMarkSpec(): {
+    mode: MarkMode;
+    type: string;
+    attrs: Attributes;
+  } {
     let mode: MarkMode = "decorator";
     if (this.is(TokenType.AT)) {
       mode = "annotation";
@@ -546,34 +593,24 @@ export class Parser {
       mode = "overlay";
       this.advance();
     }
-
-    // Mark type
     const typeToken = this.expect(TokenType.IDENT, ErrorCode.InvalidIdentifier);
-
-    // Optional attributes
     const attrs = this.parseAttributes();
+    return { mode, type: typeToken.value, attrs };
+  }
 
-    // Colon separator
-    this.expect(TokenType.COLON, ErrorCode.MissingColonInMark);
-
-    // Content
-    const children = this.parseInlineContent();
-
-    // Closing bracket
-    if (!this.is(TokenType.RBRACKET)) {
-      throw parseError(ErrorCode.UnbalancedBracket, loc.line, loc.column);
-    }
-    this.advance();
-
+  private buildMark(
+    spec: { mode: MarkMode; type: string; attrs: Attributes },
+    children: Array<InlineNode>,
+  ): Mark {
     const mark: Mark = {
       kind: "mark",
-      type: typeToken.value,
-      mode,
+      type: spec.type,
+      mode: spec.mode,
       children,
     };
 
-    if (Object.keys(attrs).length > 0) {
-      mark.attrs = attrs;
+    if (Object.keys(spec.attrs).length > 0) {
+      mark.attrs = spec.attrs;
     }
 
     return mark;

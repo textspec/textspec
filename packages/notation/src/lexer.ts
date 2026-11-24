@@ -34,6 +34,7 @@ export const TokenType = {
   // Mark mode prefixes
   AT: "AT",
   TILDE: "TILDE",
+  PLUS: "PLUS",
 
   // Values
   IDENT: "IDENT",
@@ -275,6 +276,9 @@ export class Lexer {
         case "~":
           this.state.expectIdent = true; // Expect mark type after ~
           return this.singleChar(TokenType.TILDE);
+        case "+":
+          this.state.expectIdent = true; // Expect mark type after +
+          return this.singleChar(TokenType.PLUS);
       }
     }
 
